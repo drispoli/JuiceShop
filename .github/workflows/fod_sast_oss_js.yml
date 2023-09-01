@@ -38,11 +38,18 @@ jobs:
       # If this run was triggered by a pull request event, then checkout the head of the pull request instead of the merge commit.
       - run: git checkout HEAD^2
         if: ${{ github.event_name == 'pull_request' }}      
+      
       # Java 11 required by ScanCentral Client and FoD Uploader(Univeral CI Tool)
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
           java-version: 11
+
+      - name: Generate the JS/TS .lock file
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm install --package-lock-only
       
       # Prepare source+dependencies for upload. The default example is for a Maven project that uses pom.xml.
       # TODO: Update PACKAGE_OPTS based on the ScanCentral Client documentation for your project's included tech stack(s). Helpful hints:
